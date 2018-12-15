@@ -1,0 +1,36 @@
+{
+	"manifest_version": 2,
+	"name": "draw",
+	"version": "1.0",
+	"permissions": [
+		"tabs",
+		"http://*/",
+		"https://*/",
+		"contextMenus"
+	],
+	"content_scripts": [{
+		"js": ["contentScript.js"],
+		"matches": ["http://*/*", "https://*/*"]
+	}],
+	"background": {
+		"scripts": [
+			"preHTML.js",
+			"preLogic.js",
+			"drawTypes.js",
+			"shapeTypes.js",
+			"blendTypes.js",
+			"colorTypes.js",
+			"densityTypes.js"
+		],
+		"persistent": false
+	},
+
+
+	"icons": {
+		"128": "resources/icon.png"
+	},
+	"browser_action": {
+		"default_icon": "resources/icon.png",
+		"default_popup": "popup.html"
+	}
+}

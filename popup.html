@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+	<div class="mItem">
+		<canvas id=can width="512px" height="512px"></canvas>
+	</div>
+
+	<div class="mItem">
+		<b>Export: </b><img id=img width="32px" height="32px"></canvas>
+	</div>
+
+	<div class="mItem">
+		<b>Color 1: </b><input id="colorPicker1" type="color" />
+	</div>
+
+	<div class="mItem">
+		<b>Alpha: </b><input id="alphaPicker" value="255" type="number" min="1" max="255" /> [ 1 <input id="alphaSlider" value="255" type="range" min="1" max="255" /> 255 ]
+	</div>
+
+	<div class="mItem">
+		<b>Density Value: </b><input id="densityValPicker" step="0.01" style="none" value="1" type="number" min="0" max="1" /> [ 0.0 <input id="densityValSlider" step="any" value="1" type="range" min="0" max="1" /> 1.0 ]
+	</div>
+
+	<div class="mItem">
+		<b>Draw Width: </b><input id="widthPicker" value="16" type="number" min="1" max="32" /> [ 1 <input id="widthSlider" value="16" type="range" min="1" max="32" /> 32 ]
+	</div>
+
+	<div class="mItem">
+		<button id="undoButton" type="button">Undo</button>
+		<button id="redoButton" type="button">Redo</button>
+		<button id="fillAllButton" type="button">Fill All</button>
+	</div>
+
+	<form id="optionList">
+
+	</form>
+	<script type="text/javascript" src="preLogic.js"></script>
+	<script type="text/javascript" src="drawTypes.js"></script>
+	<script type="text/javascript" src="shapeTypes.js"></script>
+	<script type="text/javascript" src="densityTypes.js"></script>
+	<script type="text/javascript" src="colorTypes.js"></script>
+	<script type="text/javascript" src="blendTypes.js"></script>
+	<script type="text/javascript" src="popup.js"></script>
+	<style>
+		* {
+			user-select: none;
+		}
+
+		.mItem {
+			padding: 5px 0px;
+		}
+
+		#img {
+			border: 1px dashed black;
+		}
+
+		#can {
+			border: 1px dashed black;
+			background-position: 0px 0px, 10px 10px;
+			background-size: 20px 20px;
+			background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fafafa 25%, #fafafa 75%, #eee 75%, #eee 100%);
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			/* display: none; <- Crashes Chrome on hover */
+			-webkit-appearance: none;
+			margin: 0;
+			/* <-- Apparently some margin are still there even though it's hidden */
+		}
+	</style>
+</body>
+
+</html>
