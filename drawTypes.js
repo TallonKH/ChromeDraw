@@ -25,7 +25,7 @@ const drawLine = {
 		stateChanged = true;
 	},
 	"mouseUp": function(typeChain) {
-		if(pressInCanvas){
+		if (pressInCanvas) {
 			lineTo(mouseDownX, mouseDownY, mcsX, mcsY, function(x1, y1) {
 				typeChain[1].func(typeChain, x1, y1);
 			});
@@ -37,14 +37,31 @@ const drawLine = {
 drawTypeList.push(drawLine);
 
 function registerDrawTypes() {
-	typeChain[0] = drawTypeList[0];
+	const typeChainIndex = 0;
+	typeChain[typeChainIndex] = drawTypeList[0];
 
-	let queuedHTML0 = "<b>Draw Mode: </b><br />";
+	const pane = domec("opListPane");
+	const paneTitle = domec("paneHeader");
+	paneTitle.innerHTML = "Draw Mode";
+	pane.appendChild(paneTitle);
+
 	for (const i in drawTypeList) {
 		const type = drawTypeList[i];
-		const is = i.toString();
-		queuedHTML0 += "<input type=radio name=drawMode id=drawR" + is + " value=" + is + (i == 0 ? " checked=\"checked\"" : "") + " /> " + type.name + "<br />";
+
+		const radc = domec("radioOption");
+		const rad = document.createElement("input");
+		rad.type = "radio";
+		rad.name = "drawMode";
+		if (i == 0) {
+			rad.checked = "checked";
+		}
+		rad.onchange = function() {
+			typeChain[typeChainIndex] = type;
+		}
+		radc.appendChild(rad);
+		radc.appendChild(domte(type.name));
+
+		pane.appendChild(radc);
 	}
-	queuedHTML0 += "<br />";
-	optionList.innerHTML += queuedHTML0;
+	optionList.appendChild(pane);
 }

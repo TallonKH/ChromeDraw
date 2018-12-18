@@ -13,7 +13,6 @@
 // - Gradient (use first 2 (or input 0-N) color inputs?)
 // - Alpha Mask (override alpha values - use alpha input)
 // - Erase (just deletes stuff - same as Alpha Mask 0)
-
 const can = document.getElementById("can");
 const colorP = document.getElementById("colorPicker1");
 const widthP = document.getElementById("widthPicker");
@@ -447,14 +446,6 @@ function randomizeBrush(w, h) {
 	}
 }
 
-function updateTypeChain(){
-	typeChain[0] = drawTypeList[document.querySelector('input[name="drawMode"]:checked').value];
-	typeChain[1] = shapeTypeList[document.querySelector('input[name="shapeMode"]:checked').value];
-	typeChain[2] = blendTypeList[document.querySelector('input[name="blendMode"]:checked').value];
-	typeChain[3] = colorTypeList[document.querySelector('input[name="colorMode"]:checked').value];
-	typeChain[4] = densityTypeList[document.querySelector('input[name="densityMode"]:checked').value];
-}
-
 can.onmousemove = function(e) {
 	prevMcsX = mcsX;
 	prevMcsY = mcsY;
@@ -466,11 +457,9 @@ can.onmousemove = function(e) {
 }
 
 document.onmousedown = function(e){
-	updateTypeChain();
 }
 
 can.onmousedown = function(e) {
-	updateTypeChain();
 	pressInCanvas = true;
 	mouseDownX = mcsX;
 	mouseDownY = mcsY;

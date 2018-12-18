@@ -93,14 +93,31 @@ const densityBrush = {
 densityTypeList.push(densityBrush);
 
 function registerDensityTypes() {
-	typeChain[4] = densityTypeList[0];
+	const typeChainIndex = 4;
+	typeChain[typeChainIndex] = densityTypeList[0];
 
-	let queuedHTML4 = "<b>Density Mode: </b><br />";
+	const pane = domec("opListPane");
+	const paneTitle = domec("paneHeader");
+	paneTitle.innerHTML = "Density";
+	pane.appendChild(paneTitle);
+
 	for (const i in densityTypeList) {
 		const type = densityTypeList[i];
-		const is = i.toString();
-		queuedHTML4 += "<input type=radio name=densityMode id=densityR" + is + " value=" + is + (i == 0 ? " checked=\"checked\"" : "") + " /> " + type.name + "<br />";
+
+		const radc = domec("radioOption");
+		const rad = document.createElement("input");
+		rad.type = "radio";
+		rad.name = "densityMode";
+		if (i == 0) {
+			rad.checked = "checked";
+		}
+		rad.onchange = function() {
+			typeChain[typeChainIndex] = type;
+		}
+		radc.appendChild(rad);
+		radc.appendChild(domte(type.name));
+
+		pane.appendChild(radc);
 	}
-	queuedHTML4 += "<br />";
-	optionList.innerHTML += queuedHTML4;
+	optionList.appendChild(pane);
 }

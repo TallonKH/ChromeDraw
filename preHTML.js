@@ -9,9 +9,4 @@ chrome.contextMenus.onClicked.addListener(function(dat, tab) {
 	chrome.tabs.create({
 		url: chrome.runtime.getURL("popup.html")
 	});
-	// var image = new Image();
-	// image.onload = function() {
-	// 	ctx.drawImage(image, 0, 0);
-	// };
-	// image.src = dat.srcUrl;
 });

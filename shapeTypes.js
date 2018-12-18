@@ -82,14 +82,31 @@ const shapeRect = {
 shapeTypeList.push(shapeRect);
 
 function registerShapeTypes() {
-	typeChain[1] = shapeTypeList[0];
+	const typeChainIndex = 1;
+	typeChain[typeChainIndex] = shapeTypeList[0];
 
-	let queuedHTML1 = "<b>Shape Mode: </b><br />";
+	const pane = domec("opListPane");
+	const paneTitle = domec("paneHeader");
+	paneTitle.innerHTML = "Shape";
+	pane.appendChild(paneTitle);
+
 	for (const i in shapeTypeList) {
 		const type = shapeTypeList[i];
-		const is = i.toString();
-		queuedHTML1 += "<input type=radio name=shapeMode id=shapeR" + is + " value=" + is + (i == 0 ? " checked=\"checked\"" : "") + " /> " + type.name + "<br />";
+
+		const radc = domec("radioOption");
+		const rad = document.createElement("input");
+		rad.type = "radio";
+		rad.name = "shapeMode";
+		if (i == 0) {
+			rad.checked = "checked";
+		}
+		rad.onchange = function() {
+			typeChain[typeChainIndex] = type;
+		}
+		radc.appendChild(rad);
+		radc.appendChild(domte(type.name));
+
+		pane.appendChild(radc);
 	}
-	queuedHTML1 += "<br />";
-	optionList.innerHTML += queuedHTML1;
+	optionList.appendChild(pane);
 }

@@ -58,14 +58,31 @@ const blendAlphaOverride = {
 blendTypeList.push(blendAlphaOverride);
 
 function registerBlendTypes() {
-	typeChain[2] = blendTypeList[0];
+	const typeChainIndex = 2;
+	typeChain[typeChainIndex] = blendTypeList[0];
 
-	let queuedHTML2 = "<b>Blend Mode: </b><br />";
+	const pane = domec("opListPane");
+	const paneTitle = domec("paneHeader");
+	paneTitle.innerHTML = "Blend";
+	pane.appendChild(paneTitle);
+
 	for (const i in blendTypeList) {
 		const type = blendTypeList[i];
-		const is = i.toString();
-		queuedHTML2 += "<input type=radio name=blendMode id=blendR" + is + " value=" + is + (i == 0 ? " checked=\"checked\"" : "") + " /> " + type.name + "<br />";
+
+		const radc = domec("radioOption");
+		const rad = document.createElement("input");
+		rad.type = "radio";
+		rad.name = "blendMode";
+		if (i == 0) {
+			rad.checked = "checked";
+		}
+		rad.onchange = function() {
+			typeChain[typeChainIndex] = type;
+		}
+		radc.appendChild(rad);
+		radc.appendChild(domte(type.name));
+
+		pane.appendChild(radc);
 	}
-	queuedHTML2 += "<br />";
-	optionList.innerHTML += queuedHTML2;
+	optionList.appendChild(pane);
 }

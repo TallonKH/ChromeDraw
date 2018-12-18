@@ -12,14 +12,31 @@ const colorPrimary = {
 colorTypeList.push(colorPrimary);
 
 function registerColorTypes() {
-	typeChain[3] = colorTypeList[0];
+	const typeChainIndex = 3;
+	typeChain[typeChainIndex] = colorTypeList[0];
 
-	let queuedHTML3 = "<b>Color Mode: </b><br />";
+	const pane = domec("opListPane");
+	const paneTitle = domec("paneHeader");
+	paneTitle.innerHTML = "Color";
+	pane.appendChild(paneTitle);
+
 	for (const i in colorTypeList) {
 		const type = colorTypeList[i];
-		const is = i.toString();
-		queuedHTML3 += "<input type=radio name=colorMode id=colorR" + is + " value=" + is + (i == 0 ? " checked=\"checked\"" : "") + " /> " + type.name + "<br />";
+
+		const radc = domec("radioOption");
+		const rad = document.createElement("input");
+		rad.type = "radio";
+		rad.name = "colorMode";
+		if (i == 0) {
+			rad.checked = "checked";
+		}
+		rad.onchange = function() {
+			typeChain[typeChainIndex] = type;
+		}
+		radc.appendChild(rad);
+		radc.appendChild(domte(type.name));
+
+		pane.appendChild(radc);
 	}
-	queuedHTML3 += "<br />";
-	optionList.innerHTML += queuedHTML3;
+	optionList.appendChild(pane);
 }
