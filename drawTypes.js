@@ -27,7 +27,15 @@ const drawLine = {
 	"mouseUp": function(typeChain) {
 		if (pressInCanvas) {
 			lineTo(mouseDownX, mouseDownY, mcsX, mcsY, function(x1, y1) {
-				typeChain[1].func(typeChain, x1, y1);
+				if (shiftDown) {
+					if (Math.abs(mouseDownX - mcsX) > Math.abs(mouseDownY - mcsY)) {
+						typeChain[1].func(typeChain, x1, mouseDownY);
+					} else {
+						typeChain[1].func(typeChain, mouseDownX, y1);
+					}
+				} else {
+					typeChain[1].func(typeChain, x1, y1);
+				}
 			});
 			changeImage(workingImgData);
 		}
