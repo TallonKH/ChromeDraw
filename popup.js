@@ -109,14 +109,17 @@ document.addEventListener("keydown", function(e) {
 			if (metaDown || controlDown) {
 				if (shiftDown) {
 					redoState();
+					e.preventDefault();
 				} else {
 					undoState();
+					e.preventDefault();
 				}
 			}
 			break;
 		case "y":
 			if (metaDown || controlDown) {
 				redoState();
+				e.preventDefault();
 			}
 			break;
 	}

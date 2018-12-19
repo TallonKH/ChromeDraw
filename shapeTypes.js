@@ -66,7 +66,7 @@ const shapeRect = {
 			});
 		};
 		const r = drawWidth;
-		const r2 = Math.ceil(drawWidth/6);
+		const r2 = Math.ceil(drawWidth / 6);
 
 		const minX = Math.max(x - r, 0);
 		const maxX = Math.min(x + r, imgWidth);
@@ -80,6 +80,37 @@ const shapeRect = {
 	}
 }
 shapeTypeList.push(shapeRect);
+
+
+const shapePixel = {
+	"name": "Pixel",
+	"mouseDown": Function.prototype,
+	"mouseUp": Function.prototype,
+	"mouseMoved": Function.prototype,
+	"func": function(typeChain, x, y) {
+		const shapeFunc = function(xs, ys) {
+			editPixel(workingImgData, xs, ys, function(color) {
+				return typeChain[2].func(color, typeChain[3].func(xc, yc, xs, ys), typeChain[4].func(xc, yc, xs, ys));
+			});
+		};
+		const d = drawWidth;
+		const r = Math.floor(d/2);
+		const xp = x - x % d;
+		const yp = y - y % d;
+		const xc = xp + r;
+		const yc = yp + r;
+		const minX = Math.max(xp, 0);
+		const maxX = Math.min(xp + d, imgWidth);
+		const minY = Math.max(yp, 0);
+		const maxY = Math.min(yp + d, imgHeight);
+		for (let xx = minX; xx < maxX; xx++) {
+			for (let yy = minY; yy < maxY; yy++) {
+				shapeFunc(xx, yy);
+			}
+		}
+	}
+}
+shapeTypeList.push(shapePixel);
 
 function registerShapeTypes() {
 	const typeChainIndex = 1;
