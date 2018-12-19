@@ -27,6 +27,7 @@ const undoButton = document.getElementById("undoButton");
 const redoButton = document.getElementById("redoButton");
 const fillAllButton = document.getElementById("fillAllButton");
 const ctx = can.getContext("2d");
+const octx = overlay.getContext("2d");
 const standardChunkSize = 64;
 let maxUndoCount = 10;
 let currentHitPixels = null;
@@ -451,6 +452,7 @@ function randomizeBrush(w, h) {
 }
 
 can.addEventListener("mousemove", function(e) {
+	octx.clearRect(0, 0, overlay.width, overlay.height);
 	prevMcsX = mcsX;
 	prevMcsY = mcsY;
 	mcsX = e.offsetX;
@@ -475,6 +477,7 @@ can.addEventListener("mousedown", function(e) {
 });
 
 document.addEventListener("mouseup", function(e) {
+	octx.clearRect(0, 0, overlay.width, overlay.height);
 	mouseDown = false;
 	for (let i = typeChain.length - 1; i >= 0; i--) {
 		typeChain[i].mouseUp(typeChain);

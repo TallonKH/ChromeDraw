@@ -26,21 +26,61 @@ const drawLine = {
 	},
 	"mouseUp": function(typeChain) {
 		if (pressInCanvas) {
-			lineTo(mouseDownX, mouseDownY, mcsX, mcsY, function(x1, y1) {
-				if (shiftDown) {
-					if (Math.abs(mouseDownX - mcsX) > Math.abs(mouseDownY - mcsY)) {
-						typeChain[1].func(typeChain, x1, mouseDownY);
-					} else {
-						typeChain[1].func(typeChain, mouseDownX, y1);
-					}
-				} else {
+			if (shiftDown) {
+				const dx = mouseDownX - mcsX;
+				const dy = mouseDownY - mcsY;
+				const l = Math.sqrt(dx * dx + dy * dy);
+				const rads = Math.round(Math.atan(dy / dx) / 0.2617993878) * 0.2617993878 + (dx >= 0 ? 3.14159 : 0);
+				const ex = mouseDownX + l * Math.cos(rads);
+				const ey = mouseDownY + l * Math.sin(rads);
+				lineTo(mouseDownX, mouseDownY, ex, ey, function(x1, y1) {
 					typeChain[1].func(typeChain, x1, y1);
-				}
-			});
+				});
+			} else {
+				lineTo(mouseDownX, mouseDownY, mcsX, mcsY, function(x1, y1) {
+					typeChain[1].func(typeChain, x1, y1);
+				});
+			}
 			changeImage(workingImgData);
 		}
 	},
-	"mouseMoved": Function.prototype
+	"mouseMoved": function(typeChain) {
+		if (pressInCanvas) {
+			if (shiftDown) {
+				const dx = mouseDownX - mcsX;
+				const dy = mouseDownY - mcsY;
+				const l = Math.sqrt(dx * dx + dy * dy);
+				if(l > 0){
+					const rads = Math.round(Math.atan(dy / dx) / 0.2617993878) * 0.2617993878 + (dx >= 0 ? 3.14159 : 0);
+					const ex = mouseDownX + l * Math.cos(rads);
+					const ey = mouseDownY + l * Math.sin(rads);
+					octx.strokeStyle = "#000000";
+					octx.lineWidth = 2;
+					octx.beginPath();
+					octx.moveTo(mouseDownX, mouseDownY);
+					octx.lineTo(ex, ey);
+					octx.closePath();
+					octx.stroke();
+
+					const degs = fmod(-Math.round(rads * 57.29578), 360).toString() + "\u{00B0}";
+					octx.font = " 20px Arial";
+					octx.strokeStyle = "#000000";
+					octx.lineWidth = 6;
+					octx.strokeText(degs, mouseDownX, mouseDownY);
+					octx.fillStyle = "#ffffff";
+					octx.fillText(degs, mouseDownX, mouseDownY);
+				}
+			} else {
+				octx.strokeStyle = "#000000";
+				octx.lineWidth = 2;
+				octx.beginPath();
+				octx.moveTo(mouseDownX, mouseDownY);
+				octx.lineTo(mcsX, mcsY);
+				octx.closePath();
+				octx.stroke();
+			}
+		}
+	}
 }
 drawTypeList.push(drawLine);
 
