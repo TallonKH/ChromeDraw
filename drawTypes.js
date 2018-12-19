@@ -63,9 +63,9 @@ function registerDrawTypes() {
 		if (i == 0) {
 			rad.checked = "checked";
 		}
-		rad.onchange = function() {
+		rad.addEventListener("change", function() {
 			typeChain[typeChainIndex] = type;
-		}
+		});
 		radc.appendChild(rad);
 		radc.appendChild(domte(type.name));
 

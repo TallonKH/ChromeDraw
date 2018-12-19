@@ -5,6 +5,7 @@
 
 	<div class="mItem">
 		<canvas id=can width="512px" height="512px"></canvas>
+		<canvas id=overlay width="512px" height="512px"></canvas>
 	</div>
 
 	<div id="optionList">
@@ -92,6 +93,13 @@
 			background-position: 0px 0px, 10px 10px;
 			background-size: 20px 20px;
 			background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fafafa 25%, #fafafa 75%, #eee 75%, #eee 100%);
+			position: absolute;
+		}
+
+		#overlay {
+			border: 1px solid red;
+			position: relative;
+			pointer-events: none;
 		}
 
 		input::-webkit-outer-spin-button,

@@ -14,6 +14,7 @@
 // - Alpha Mask (override alpha values - use alpha input)
 // - Erase (just deletes stuff - same as Alpha Mask 0)
 const can = document.getElementById("can");
+const overlay = document.getElementById("overlay");
 const colorP = document.getElementById("colorPicker1");
 const widthP = document.getElementById("widthPicker");
 const widthS = document.getElementById("widthSlider");
@@ -50,47 +51,47 @@ let currentState = null;
 let stateChanged = true;
 let brushPixels = [];
 
-outImg.onmouseover = function(e) {
+outImg.addEventListener("mouseover", function(e) {
 	outImg.src = can.toDataURL();
-}
+});
 
-colorP.onchange = function(e) {
+colorP.addEventListener("change", function(e) {
 	color1 = hexToColor(colorP.value, alpha1);
-}
+});
 
-alphaP.onchange = function(e) {
+alphaP.addEventListener("change", function(e) {
 	alpha1 = parseInt(alphaP.value);
 	color1[3] = alpha1;
 	alphaS.value = alpha1;
-}
+});
 
-alphaS.oninput = function(e) {
+alphaS.addEventListener("input", function(e) {
 	alpha1 = parseInt(alphaS.value);
 	color1[3] = alpha1;
 	alphaP.value = alpha1;
-}
+});
 
-densityP.onchange = function(e) {
+densityP.addEventListener("change", function(e) {
 	densityVal = parseFloat(densityP.value);
 	densityS.value = densityVal;
-}
+});
 
-densityS.oninput = function(e) {
+densityS.addEventListener("input", function(e) {
 	densityVal = parseFloat(densityS.value);
 	densityP.value = densityVal;
-}
+});
 
-widthP.onchange = function(e) {
+widthP.addEventListener("change", function(e) {
 	drawWidth = parseInt(widthP.value);
 	widthS.value = widthP.value;
-}
+});
 
-widthS.oninput = function(e) {
+widthS.addEventListener("input", function(e) {
 	drawWidth = parseInt(widthS.value);
 	widthP.value = drawWidth;
-}
+});
 
-document.onkeydown = function(e) {
+document.addEventListener("keydown", function(e) {
 	switch (e.key) {
 		case "Shift":
 			shiftDown = true;
@@ -119,9 +120,9 @@ document.onkeydown = function(e) {
 			}
 			break;
 	}
-}
+});
 
-document.onkeyup = function(e) {
+document.addEventListener("keyup", function(e) {
 	switch (e.key) {
 		case "Shift":
 			shiftDown = false;
@@ -136,7 +137,7 @@ document.onkeyup = function(e) {
 			controlDown = false;
 			break;
 	}
-}
+});
 
 function drawModeChanged(self) {
 	drawMode = self.value;
@@ -147,7 +148,7 @@ function drawModeChanged(self) {
 // 	for (let i = 0; i < drawModeRadios.length; i++) {
 // 		const child = drawModeRadios[i];
 // 		if (child.nodeName == "INPUT") {
-// 			child.onchange = function(e) {
+// 			child.addEventListener("change", function(e) {
 // 				drawModeChanged(child);
 // 			};
 // 		}
@@ -164,10 +165,10 @@ function fillAll() {
 	changeImage(workingImgData);
 }
 
-fillAllButton.onclick = function(e) {
+fillAllButton.addEventListener("click", function(e) {
 	fillAll();
 	saveState();
-}
+});
 
 function makeGrid(len, val) {
 	const grid = new Array(len);
@@ -402,8 +403,8 @@ function redoState() {
 	// console.log(stringifyStates());
 }
 
-undoButton.onclick = undoState;
-redoButton.onclick = redoState;
+undoButton.addEventListener("click", undoState);
+redoButton.addEventListener("click", redoState);
 
 function monoMap(x1, y1, map, func) {
 	for (let x = 0, xl = map.length; x < xl; x++) {
@@ -446,7 +447,7 @@ function randomizeBrush(w, h) {
 	}
 }
 
-can.onmousemove = function(e) {
+can.addEventListener("mousemove", function(e) {
 	prevMcsX = mcsX;
 	prevMcsY = mcsY;
 	mcsX = e.offsetX;
@@ -454,12 +455,13 @@ can.onmousemove = function(e) {
 	for (let i = typeChain.length - 1; i >= 0; i--) {
 		typeChain[i].mouseMoved(typeChain);
 	}
-}
+});
 
-document.onmousedown = function(e){
-}
+document.addEventListener("mousedown", function(e){
 
-can.onmousedown = function(e) {
+});
+
+can.addEventListener("mousedown", function(e) {
 	pressInCanvas = true;
 	mouseDownX = mcsX;
 	mouseDownY = mcsY;
@@ -467,9 +469,9 @@ can.onmousedown = function(e) {
 	for (let i = typeChain.length - 1; i >= 0; i--) {
 		typeChain[i].mouseDown(typeChain);
 	}
-}
+});
 
-document.onmouseup = function(e) {
+document.addEventListener("mouseup", function(e) {
 	mouseDown = false;
 	for (let i = typeChain.length - 1; i >= 0; i--) {
 		typeChain[i].mouseUp(typeChain);
@@ -480,7 +482,7 @@ document.onmouseup = function(e) {
 		stateChanged = false;
 		saveState();
 	}
-}
+});
 
 function start() {
 	registerDrawTypes();
