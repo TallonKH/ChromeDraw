@@ -50,7 +50,7 @@ const drawLine = {
 				const dx = mouseDownX - mcsX;
 				const dy = mouseDownY - mcsY;
 				const l = Math.sqrt(dx * dx + dy * dy);
-				if(l > 0){
+				if (l > 0) {
 					const rads = Math.round(Math.atan(dy / dx) / 0.2617993878) * 0.2617993878 + (dx >= 0 ? 3.14159 : 0);
 					const ex = mouseDownX + l * Math.cos(rads);
 					const ey = mouseDownY + l * Math.sin(rads);
@@ -66,9 +66,9 @@ const drawLine = {
 					octx.font = " 20px Arial";
 					octx.strokeStyle = "#000000";
 					octx.lineWidth = 6;
-					octx.strokeText(degs, mouseDownX, mouseDownY);
+					octx.strokeText(degs, mouseDownX, mouseDownY - 10);
 					octx.fillStyle = "#ffffff";
-					octx.fillText(degs, mouseDownX, mouseDownY);
+					octx.fillText(degs, mouseDownX, mouseDownY - 10);
 				}
 			} else {
 				octx.strokeStyle = "#000000";

@@ -1,5 +1,18 @@
 const densityTypeList = [];
 
+const densityFlat = {
+	"name": "Flat",
+	"mouseDown": function(x, y, xs, ys) {
+		currentHitPixels = bGridMake(standardChunkSize);
+	},
+	"mouseUp": Function.prototype,
+	"mouseMoved": Function.prototype,
+	"func": function(x, y, xs, ys) {
+		return bGridIf(currentHitPixels, xs, ys, densityVal, 0);
+	}
+}
+densityTypeList.push(densityFlat);
+
 const densityRadial = {
 	"name": "Radial Gradient",
 	"mouseDown": Function.prototype,
@@ -27,19 +40,6 @@ const densitySquare = {
 	}
 }
 densityTypeList.push(densitySquare);
-
-const densityFlat = {
-	"name": "Flat",
-	"mouseDown": function(x, y, xs, ys) {
-		currentHitPixels = bGridMake(standardChunkSize);
-	},
-	"mouseUp": Function.prototype,
-	"mouseMoved": Function.prototype,
-	"func": function(x, y, xs, ys) {
-		return bGridIf(currentHitPixels, xs, ys, densityVal, 0);
-	}
-}
-densityTypeList.push(densityFlat);
 
 const densityFuzz = {
 	"name": "Fuzz",
