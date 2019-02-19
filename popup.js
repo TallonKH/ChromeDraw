@@ -1,18 +1,10 @@
 // TODO
-// Undo / Redo (use stack, save whole image state - each full image is roughly 1 MB)
 // Fill
-// Better UI
-// Color Blend Mode (only active if mode is Color or Gradient)(mix, add, multilpy, A-B, B-A, A/B, B/A, screen, dodge, burn, etc)
-// Line Tool
-// Circle Pen
 // Shape Tools
 // Dropper
 // Multiple color inputs
-// == RADIO PANEL - DRAW TYPE == (pen, line, shape, fill, etc will use Draw Type to decide what they do)
-// - Color (plain color & alpha input)
-// - Gradient (use first 2 (or input 0-N) color inputs?)
-// - Alpha Mask (override alpha values - use alpha input)
-// - Erase (just deletes stuff - same as Alpha Mask 0)
+
+const urlParams = new URL(window.location.href).searchParams;
 const can = document.getElementById("can");
 const overlay = document.getElementById("overlay");
 const colorP = document.getElementById("colorPicker1");
@@ -29,6 +21,18 @@ const fillAllButton = document.getElementById("fillAllButton");
 const ctx = can.getContext("2d");
 const octx = overlay.getContext("2d");
 const standardChunkSize = 64;
+
+if (urlParams.has("srcImg")) {
+	const srcUrl = urlParams.get("srcImg");
+	const img = new Image();
+	img.src = srcUrl;
+	img.onload = function() {
+		ctx.drawImage(img, 0, 0);
+		workingImgData = ctx.getImageData(0, 0, imgWidth, imgHeight);
+		saveState();
+	};
+}
+
 let maxUndoCount = 10;
 let currentHitPixels = null;
 let drawWidth = parseInt(widthP.value);
@@ -462,7 +466,7 @@ can.addEventListener("mousemove", function(e) {
 	}
 });
 
-document.addEventListener("mousedown", function(e){
+document.addEventListener("mousedown", function(e) {
 
 });
 

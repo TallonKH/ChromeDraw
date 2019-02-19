@@ -7,6 +7,6 @@ const importMenuItem = {
 chrome.contextMenus.create(importMenuItem);
 chrome.contextMenus.onClicked.addListener(function(dat, tab) {
 	chrome.tabs.create({
-		url: chrome.runtime.getURL("popup.html")
+		url: chrome.runtime.getURL("popup.html?srcImg=" + dat.srcUrl)
 	});
 });
