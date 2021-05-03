@@ -495,13 +495,15 @@ can.addEventListener("dragleave", (e) => {
 	e.preventDefault();
 });
 
+const placeImage = (img) => {
+	ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, can.width, can.height);
+	workingImgData = ctx.getImageData(0, 0, can.width, can.height);
+	saveState();
+}
+
 const loadImage = (src) => {
 	const img = new Image();
-	img.onload = () => {
-		ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, can.width, can.height);
-		workingImgData = ctx.getImageData(0, 0, can.width, can.height);
-		saveState();
-	};
+	img.onload = () => placeImage(img);
 	img.src = src;
 };
 
@@ -516,6 +518,26 @@ can.addEventListener("drop", (e) => {
 		}
 	}
 	e.preventDefault();
+});
+
+document.addEventListener("paste", (e) => {
+	switch (e.clipboardData.types[0]) {
+		case "text/plain":
+			loadImage(e.clipboardData.getData("text/plain"));
+			break;
+		case "text/html":
+			const parser = new DOMParser();
+			const content = parser.parseFromString(e.clipboardData.getData("text/html"), "text/html");
+			if (content && content.images.length > 0) {
+				loadImage(content.images[0].src);
+			}
+			break;
+	}
+});
+
+document.addEventListener("copy", (e) => {
+	// e.clipboardData.setData("image/png", can.toDataURL());
+	can.toBlob(blob => navigator.clipboard.write([new ClipboardItem({'image/png': blob})]));
 });
 
 function start() {
