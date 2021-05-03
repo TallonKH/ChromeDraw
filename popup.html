@@ -26,7 +26,7 @@
 
 		<div class="opListPane">
 			<div class="paneHeader">Density Value</div>
-			<input id="densityValPicker" step="0.01" style="none" value="1" type="number" min="0" max="1" /> [ 0.0 <input id="densityValSlider" step="any" value="1" type="range" min="0" max="1" /> 1.0 ]
+			<input id="densityValPicker" step="0.01" value="1" type="number" min="0" max="1" /> [ 0.0 <input id="densityValSlider" step="any" value="1" type="range" min="0" max="1" /> 1.0 ]
 		</div>
 
 		<div class="opListPane">
@@ -94,12 +94,19 @@
 			background-size: 20px 20px;
 			background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%), linear-gradient(45deg, #eee 25%, #fafafa 25%, #fafafa 75%, #eee 75%, #eee 100%);
 			position: absolute;
+			image-rendering: pixelated;
 		}
 
 		#overlay {
+			transition: all 0.2s;
 			border: 1px solid red;
 			position: relative;
 			pointer-events: none;
+		}
+
+		#overlay.dragover {
+			border: 1px solid #80ff6f;
+			box-shadow: 0px 0px 4px #1cee00;
 		}
 
 		input::-webkit-outer-spin-button,

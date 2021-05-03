@@ -22,17 +22,6 @@ const ctx = can.getContext("2d");
 const octx = overlay.getContext("2d");
 const standardChunkSize = 64;
 
-if (urlParams.has("srcImg")) {
-	const srcUrl = urlParams.get("srcImg");
-	const img = new Image();
-	img.src = srcUrl;
-	img.onload = function() {
-		ctx.drawImage(img, 0, 0);
-		workingImgData = ctx.getImageData(0, 0, imgWidth, imgHeight);
-		saveState();
-	};
-}
-
 let maxUndoCount = 10;
 let currentHitPixels = null;
 let drawWidth = parseInt(widthP.value);
@@ -56,47 +45,49 @@ let currentState = null;
 let stateChanged = true;
 let brushPixels = [];
 
-outImg.addEventListener("mouseover", function(e) {
+ctx.imageSmoothingEnabled = false;
+
+outImg.addEventListener("mouseover", function (e) {
 	outImg.src = can.toDataURL();
 });
 
-colorP.addEventListener("change", function(e) {
+colorP.addEventListener("change", function (e) {
 	color1 = hexToColor(colorP.value, alpha1);
 });
 
-alphaP.addEventListener("change", function(e) {
+alphaP.addEventListener("change", function (e) {
 	alpha1 = parseInt(alphaP.value);
 	color1[3] = alpha1;
 	alphaS.value = alpha1;
 });
 
-alphaS.addEventListener("input", function(e) {
+alphaS.addEventListener("input", function (e) {
 	alpha1 = parseInt(alphaS.value);
 	color1[3] = alpha1;
 	alphaP.value = alpha1;
 });
 
-densityP.addEventListener("change", function(e) {
+densityP.addEventListener("change", function (e) {
 	densityVal = parseFloat(densityP.value);
 	densityS.value = densityVal;
 });
 
-densityS.addEventListener("input", function(e) {
+densityS.addEventListener("input", function (e) {
 	densityVal = parseFloat(densityS.value);
 	densityP.value = densityVal;
 });
 
-widthP.addEventListener("change", function(e) {
+widthP.addEventListener("change", function (e) {
 	drawWidth = parseInt(widthP.value);
 	widthS.value = widthP.value;
 });
 
-widthS.addEventListener("input", function(e) {
+widthS.addEventListener("input", function (e) {
 	drawWidth = parseInt(widthS.value);
 	widthP.value = drawWidth;
 });
 
-document.addEventListener("keydown", function(e) {
+document.addEventListener("keydown", function (e) {
 	switch (e.key) {
 		case "Shift":
 			shiftDown = true;
@@ -130,7 +121,7 @@ document.addEventListener("keydown", function(e) {
 	}
 });
 
-document.addEventListener("keyup", function(e) {
+document.addEventListener("keyup", function (e) {
 	switch (e.key) {
 		case "Shift":
 			shiftDown = false;
@@ -173,7 +164,7 @@ function fillAll() {
 	changeImage(workingImgData);
 }
 
-fillAllButton.addEventListener("click", function(e) {
+fillAllButton.addEventListener("click", function (e) {
 	fillAll();
 	saveState();
 });
@@ -425,14 +416,14 @@ function monoMap(x1, y1, map, func) {
 
 function fillCircle(x1, y1, w, color, opacity) {
 	if (color1[3] >= 255 && opacity >= 1) {
-		circle(x1, y1, w, function(x2, y2, r) {
+		circle(x1, y1, w, function (x2, y2, r) {
 			setPixel(workingImgData, x2, y2, color);
 		});
 	}
 
-	circle(x1, y1, w, function(x2, y2, r) {
-		bGridDo(currentHitPixels, Math.floor(x2), Math.floor(y2), function(x3, y3) {
-			editPixel(workingImgData, x3, y3, function(color) {
+	circle(x1, y1, w, function (x2, y2, r) {
+		bGridDo(currentHitPixels, Math.floor(x2), Math.floor(y2), function (x3, y3) {
+			editPixel(workingImgData, x3, y3, function (color) {
 				return applyStandard(color, color1, opacity);
 			});
 			return true;
@@ -455,7 +446,7 @@ function randomizeBrush(w, h) {
 	}
 }
 
-can.addEventListener("mousemove", function(e) {
+can.addEventListener("mousemove", function (e) {
 	octx.clearRect(0, 0, overlay.width, overlay.height);
 	prevMcsX = mcsX;
 	prevMcsY = mcsY;
@@ -466,11 +457,7 @@ can.addEventListener("mousemove", function(e) {
 	}
 });
 
-document.addEventListener("mousedown", function(e) {
-
-});
-
-can.addEventListener("mousedown", function(e) {
+can.addEventListener("mousedown", function (e) {
 	pressInCanvas = true;
 	mouseDownX = mcsX;
 	mouseDownY = mcsY;
@@ -480,7 +467,7 @@ can.addEventListener("mousedown", function(e) {
 	}
 });
 
-document.addEventListener("mouseup", function(e) {
+document.addEventListener("mouseup", function (e) {
 	octx.clearRect(0, 0, overlay.width, overlay.height);
 	mouseDown = false;
 	for (let i = typeChain.length - 1; i >= 0; i--) {
@@ -494,6 +481,43 @@ document.addEventListener("mouseup", function(e) {
 	}
 });
 
+can.addEventListener("dragover", (e) => {
+	e.preventDefault();
+});
+
+can.addEventListener("dragenter", (e) => {
+	overlay.classList.add("dragover");
+	e.preventDefault();
+});
+
+can.addEventListener("dragleave", (e) => {
+	overlay.classList.remove("dragover");
+	e.preventDefault();
+});
+
+const loadImage = (src) => {
+	const img = new Image();
+	img.onload = () => {
+		ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, can.width, can.height);
+		workingImgData = ctx.getImageData(0, 0, can.width, can.height);
+		saveState();
+	};
+	img.src = src;
+};
+
+const imgInput = document.getElementById("img-input");
+
+can.addEventListener("drop", (e) => {
+	overlay.classList.remove("dragover");
+	if (e.dataTransfer.items) {
+		const item = e.dataTransfer.items[0];
+		if (item.kind === "file") {
+			loadImage(URL.createObjectURL(item.getAsFile()));
+		}
+	}
+	e.preventDefault();
+});
+
 function start() {
 	registerDrawTypes();
 	registerShapeTypes();
@@ -504,3 +528,8 @@ function start() {
 }
 
 start();
+
+if (urlParams.has("srcImg")) {
+	const srcUrl = urlParams.get("srcImg");
+	loadImage(srcUrl);
+}
