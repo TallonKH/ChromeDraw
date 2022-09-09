@@ -8,7 +8,7 @@ function domec(clas){
 	return e;
 }
 
-// new div with class
+// new text node with class
 function domte(text){
 	return document.createTextNode(text);
 }
